@@ -13,7 +13,7 @@
         text-align: center;
       }
       .main {
-        width: 60%;
+        width: 45%;
         margin: 20px auto;
         /* border: 1px solid red; */
       }
@@ -21,25 +21,51 @@
         width: 100%;
         margin-bottom: 20px;
         height: 20px;
-        font-size: 15px;
+        font-size: 15px;border-radius :10px;
+         border: 1px solid gray;
       }
       button {
         width: 100%;
         margin-bottom: 20px;
         height: 30px;
-        font-size :15px;
+        font-size :20px;
         border-radius: 15px;
         background-color: teal;
         border: none;
         color: white;
       }
-      img {
-          width: 40%;
-          height : 300px;
+    #poster{
+         width: 100%;
+          height : 350px;
           margin: 10px 0;
+          border-radius :10px;
+          margin-right: 10px;
       }
       #data {
           font-size: 20px;
+          display : grid; 
+        grid-template-columns : 50% 50%;
+     
+        /* border: 1px solid black; */
+      }
+      #err > img {
+        height: 380px;
+        width: 100%;
+        border-radius :10px;
+      }
+     body {
+        background-image : url('https://i.pinimg.com/736x/f9/27/c0/f927c037eee512277b5d4df5721ee55d.jpg');
+        background-size: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+         font-style: italic;
+      }
+      
+      #details > div {
+        /* border: 1px solid black; */
+        margin: 10px 5px;
+        /* color : rgb(230, 223, 223); */
+        text-align: justify;
+       
       }
     </style>
   </head>
@@ -51,52 +77,73 @@
         <button onclick="getDetails()">Search Movie</button>
       </div>
       <div id="data"></div>
+      <div id="err"></div>
     </div>
   </body>
 </html>
 
 <script>
   let parent = document.getElementById("data");
+  let err = document.getElementById("err");
   async function getDetails() {
     let movie = document.getElementById("movie").value;
+    parent.innerHTML = null;
+    err.innerHTML = null;
     let res = await fetch(
       `https://www.omdbapi.com/?apikey=207236e2&t=${movie}`
     );
     let data = await res.json();
     if (data.Title == undefined || movie == ''){
-        alert('Invalid Movie Name')
-        
+        // alert('Invalid Movie Name')
+        showError()
     }
     else  if (movie != ''){
         showDetails(data);
     }
+
     document.getElementById("movie").value = null;
   }
 
   function showDetails(movie) {
-    parent.innerHTML = null;
+   
 
-    let div = document.createElement("div");
+
+    let img_div = document.createElement("div");
+
+    let details_div = document.createElement("div");
+    details_div.setAttribute('id','details')
 
     let name = document.createElement("div");
-    name.innerText ='Title : ' + movie.Title;
+    name.innerHTML ='<strong>Title :</strong> ' + movie.Title ;
 
     let lang = document.createElement("div");
-    lang.innerText ='Language : ' + movie.Language;
+    lang.innerHTML ='<strong>Language :</strong> ' + movie.Language;
 
     let ratings = document.createElement("div");
-    ratings.innerText = 'IMDb Rating : ' + movie.imdbRating;
+    ratings.innerHTML = '<strong>IMDb Rating :</strong> ' + movie.imdbRating;
 
     let img = document.createElement("img");
+    img.setAttribute('id','poster')
     img.src = movie.Poster;
 
     let year = document.createElement("div");
-    year.innerText = 'Released : ' + movie.Released;
+    year.innerHTML = '<strong>Released : </strong>' + movie.Released;
 
     let genre = document.createElement("div");
-    genre.innerText ='Genre : '+ movie.Genre;
+    genre.innerHTML ='<strong>Genre : </strong>'+ movie.Genre;
 
-    div.append(img, name,ratings, year, genre ,lang);
-    parent.append(div);
+    img_div.append(img)
+    details_div.append( name,ratings, year, genre ,lang)
+    parent.append(img_div,details_div);
+  }
+  function showError() {
+    let img = document.createElement("img");
+    img.src = 'https://www.layojatltd.com/images/404.gif';
+
+    let error = document.createElement("div");
+    error.style.color = 'red'
+    error.style.fontSize = '25px'
+    error.innerHTML = '<strong>OOPS Invalid Movie Name</strong>'
+    err.append(error,img)
   }
 </script>
