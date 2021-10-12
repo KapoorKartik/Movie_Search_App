@@ -122,6 +122,14 @@
     let ratings = document.createElement("div");
     ratings.innerHTML = '<strong>IMDb Rating :</strong> ' + movie.imdbRating;
 
+  //  console.log(typeof(+movie.imdbRating))
+  if ( +movie.imdbRating > 8.5) {
+    let recommended = document.createElement("div")
+    recommended.innerHTML = 'Recommended'
+    recommended.style.color = 'green'
+    details_div.append(recommended)
+  }
+
     let img = document.createElement("img");
     img.setAttribute('id','poster')
     img.src = movie.Poster;
@@ -136,6 +144,8 @@
     details_div.append( name,ratings, year, genre ,lang)
     parent.append(img_div,details_div);
   }
+
+
   function showError() {
     let img = document.createElement("img");
     img.src = 'https://www.layojatltd.com/images/404.gif';
